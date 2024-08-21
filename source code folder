@@ -1,0 +1,156 @@
+package com.vaccination;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Child {
+    String name;
+    int age;
+    String motherName;
+    String fatherName;
+    String contact;
+    ArrayList<String> vaccinations;
+    String nextAppointment;
+    String appointmentID;
+
+    public Child(String name, int age, String motherName, String fatherName, String contact) {
+        this.name = name;
+        this.age = age;
+        this.motherName = motherName;
+        this.fatherName = fatherName;
+        this.contact = contact;
+        this.vaccinations = new ArrayList<>();
+        this.nextAppointment = "None";
+        this.appointmentID = "None";
+    }
+
+    public void addVaccination(String vaccine) {
+        vaccinations.add(vaccine);
+    }
+
+    public void setNextAppointment(String date, String appointmentID) {
+        this.nextAppointment = date;
+        this.appointmentID = appointmentID;
+    }
+
+    public void displayDetails() {
+        System.out.println("Child Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Mother's Name: " + motherName);
+        System.out.println("Father's Name: " + fatherName);
+        System.out.println("Contact Number: " + contact);
+        System.out.println("Vaccinations:");
+        for (String vaccine : vaccinations) {
+            System.out.println(" - " + vaccine);
+        }
+        System.out.println("Next Appointment: " + nextAppointment);
+        System.out.println("Appointment ID: " + appointmentID);
+    }
+}
+
+public class VaccinationSystem {
+    static ArrayList<Child> children = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int choice;
+        do {
+            System.out.println("Welcome to the Child Vaccination Management System");
+            System.out.println("1. Register Child");
+            System.out.println("2. View Child Details");
+            System.out.println("3. Schedule Vaccination Appointment");
+            System.out.println("4. View Appointment ID");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    registerChild();
+                    break;
+                case 2:
+                    viewChildDetails();
+                    break;
+                case 3:
+                    scheduleAppointment();
+                    break;
+                case 4:
+                    viewAppointmentID();
+                    break;
+                case 5:
+                    System.out.println("Exiting the system...");
+                    break;
+                default:
+                    System.out.println("Invalid choice! Please try again.");
+            }
+        } while (choice != 5);
+    }
+
+    public static void registerChild() {
+        System.out.print("Enter Child's Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter Child's Age: ");
+        int age = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+        System.out.print("Enter Mother's Name: ");
+        String motherName = scanner.nextLine();
+        System.out.print("Enter Father's Name: ");
+        String fatherName = scanner.nextLine();
+        System.out.print("Enter Contact Number: ");
+        String contact = scanner.nextLine();
+
+        Child child = new Child(name, age, motherName, fatherName, contact);
+        children.add(child);
+        System.out.println("Child registered successfully!");
+    }
+
+    public static void viewChildDetails() {
+        System.out.print("Enter Child's Name to View Details: ");
+        String name = scanner.nextLine();
+
+        for (Child child : children) {
+            if (child.name.equalsIgnoreCase(name)) {
+                child.displayDetails();
+                return;
+            }
+        }
+        System.out.println("Child not found!");
+    }
+
+    public static void scheduleAppointment() {
+        System.out.print("Enter Child's Name to Schedule Appointment: ");
+        String name = scanner.nextLine();
+
+        for (Child child : children) {
+            if (child.name.equalsIgnoreCase(name)) {
+                System.out.print("Enter Vaccine Name: ");
+                String vaccine = scanner.nextLine();
+                child.addVaccination(vaccine);
+
+                System.out.print("Enter Appointment Date (DD/MM/YYYY): ");
+                String date = scanner.nextLine();
+                System.out.print("Enter Appointment ID: ");
+                String appointmentID = scanner.nextLine();
+                child.setNextAppointment(date, appointmentID);
+
+                System.out.println("Appointment scheduled successfully!");
+                return;
+            }
+        }
+        System.out.println("Child not found!");
+    }
+
+    public static void viewAppointmentID() {
+        System.out.print("Enter Child's Name to View Appointment ID: ");
+        String name = scanner.nextLine();
+
+        for (Child child : children) {
+            if (child.name.equalsIgnoreCase(name)) {
+                System.out.println("Appointment ID for " + name + ": " + child.appointmentID);
+                return;
+            }
+        }
+        System.out.println("Child not found!");
+    }
+}
